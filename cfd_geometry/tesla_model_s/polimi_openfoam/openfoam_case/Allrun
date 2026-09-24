@@ -1,0 +1,42 @@
+#!/bin/sh
+# Mesh + solve one Tesla Model S variant (OpenFOAM ESI/openfoam.com, v1912+).
+#
+# Usage:  ./Allrun [variant] [nProc]
+#   variant : an STL name from ../stl without ".stl" (default: baseline)
+#             baseline | rearwing_standard_pylons | rearwing_swan_neck
+#             rearwing_swan_neck_back | rearwing_floating_no_mounts
+#   nProc   : MPI ranks (default: numberOfSubdomains in system/decomposeParDict)
+#
+# All dictionaries expect the surface as TeslaModelS_RearWing_front.stl,
+# so the chosen variant is copied in under that name.
+cd "${0%/*}" || exit 1
+
+variant=${1:-baseline}
+stl=../stl/$variant.stl
+[ -f "$stl" ] || { echo "No such variant: $stl"; ls ../stl; exit 1; }
+
+nProc=${2:-$(foamDictionary -entry numberOfSubdomains -value system/decomposeParDict)}
+foamDictionary -entry numberOfSubdomains -set "$nProc" system/decomposeParDict >/dev/null
+
+run() {  # run <log> <cmd...>
+    log=$1; shift
+    echo "Running $* ..."
+    "$@" > "log.$log" 2>&1 || { echo "  failed, see log.$log"; exit 1; }
+}
+
+mkdir -p constant/triSurface
+cp "$stl" constant/triSurface/TeslaModelS_RearWing_front.stl
+
+run blockMesh             blockMesh
+run surfaceFeatureExtract surfaceFeatureExtract
+run decomposePar.mesh     decomposePar -force
+run snappyHexMesh         mpirun -np "$nProc" snappyHexMesh -overwrite -parallel
+run reconstructParMesh    reconstructParMesh -constant
+rm -rf processor*
+run checkMesh             checkMesh
+
+run decomposePar          decomposePar -force
+run simpleFoam            mpirun -np "$nProc" simpleFoam -parallel
+run reconstructPar        reconstructPar -latestTime
+
+echo "Done ($variant). Force coefficients: postProcessing/forceCoeffs*/"

@@ -1,0 +1,11 @@
+# OpenFOAM run outputs
+log.*
+processor*/
+postProcessing/
+constant/polyMesh/
+constant/extendedFeatureEdgeMesh/
+*.eMesh
+*.foam
+!foam.foam
+.DS_Store
+__pycache__/

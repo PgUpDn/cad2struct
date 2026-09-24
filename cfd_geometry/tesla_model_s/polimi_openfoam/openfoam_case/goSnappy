@@ -1,0 +1,1 @@
+mpirun -np 6 snappyHexMesh -overwrite -parallel > logSnappy.simple &
