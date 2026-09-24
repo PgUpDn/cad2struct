@@ -1,5 +1,7 @@
 # Tesla Cybertruck — CFD 几何（OpenFOAM 12，四种配置）
 
+**中文** | [English](README.en.md)
+
 来源：[liukushk-a/cybertruckAerodynamics](https://github.com/liukushk-a/cybertruckAerodynamics)（米兰理工学生项目）
 
 > ⚠️ **原仓库没有任何许可声明**，默认保留所有权利。这里仅作内部研究整理用。如果要公开发布或用于论文，请先联系原作者取得授权。
