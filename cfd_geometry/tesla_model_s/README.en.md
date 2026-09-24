@@ -50,7 +50,7 @@ Case setup: half-car model (y ∈ [0, 4] m, y=0 is a symmetryPlane); domain x �
 
 **Tested**: `./Allrun rearwing_swan_neck 4` was run with OpenFOAM v1912 (for this test only, the decomposition method was switched to `simple`, because the Debian v1912 package does not ship scotch). snappyHexMesh reported "Finished meshing without any errors" and produced 5.12 million cells (including 5 prism layers), taking about 40 minutes on 4 cores. checkMesh flagged only 29 highly skewed faces (max skewness 6.75). simpleFoam ran for 3 iterations with residuals decreasing normally. The dictionary headers state **v2406**; under v1912 the `forceCoeffs` function object fails, so the case only runs with `-noFunctionObjects`. v2406 or later is recommended.
 
-> ⚠️ `Aref 2.2` in `system/forceCoeffs` corresponds to the full-car frontal area (the measured projection of `baseline.stl` is about 2.37 m²), but the domain covers only half the car and therefore only half the force, so the reported Cd/Cl are about half the true values. Either set Aref to the half-car area (1.1 from the author's estimate; about 1.18 m² measured) or multiply the results by 2.
+> ⚠️ `Aref 2.2` in `system/forceCoeffs` corresponds to the full-car frontal area (the measured projection of `baseline.stl` is about 2.36 m²), but the domain covers only half the car and therefore only half the force, so the reported Cd/Cl are about half the true values. Either set Aref to the half-car area (1.1 from the author's estimate; about 1.18 m² measured) or multiply the results by 2.
 
 ---
 
