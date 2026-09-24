@@ -1,5 +1,6 @@
 #!/bin/sh
-# Mesh + solve one Tesla Model S variant (OpenFOAM ESI/openfoam.com, v1912+).
+# Mesh + solve one Tesla Model S variant (OpenFOAM ESI/openfoam.com; dictionaries
+# were written for v2406).
 #
 # Usage:  ./Allrun [variant] [nProc]
 #   variant : an STL name from ../stl without ".stl" (default: baseline)

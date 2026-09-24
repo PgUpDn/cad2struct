@@ -39,6 +39,8 @@ cd standard_closed_bed      # 或其它三个配置
 
 原作者给出的网格规模约 800 万单元。`Allrun.sh` 写死了 6 核，需要的话请同时修改 `system/decomposeParDict`。
 
+**实测（仅网格）**：本机只有 OpenFOAM v1912，没有 OF12，所以只验证了几何能否划网格，没有跑 foamRun。做法是把表面加密等级从 (5 7) 降到 (3 4)，关闭边界层，其余不变。四种配置都报告 "Finished meshing without any errors"，每个约 454 万网格，checkMesh 全部为 `Mesh OK`。
+
 ## 注意
 
 - **MRF 转速单位疑似写错**：`constant/MRFProperties` 写的是 `rpm 67.887126`，但车轮壁面边界条件用的是 `omega 67.8871`（rad/s），而 30 m/s ÷ 0.442 m 轮半径 = 67.9 rad/s。也就是说，这个 rad/s 的数值被写在了 `rpm` 键下，MRF 区实际只转 7.1 rad/s，和轮面转速对不上。建议把 `rpm 67.887126;` 改成 `omega 67.887126;`。这里保留了原文件，没有改动。
