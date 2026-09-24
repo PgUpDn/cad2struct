@@ -2,7 +2,7 @@
 
 **中文** | [English](README.en.md)
 
-从三个公开仓库中提取出能直接用于外流场 CFD 的几何，并按车型归类。每份几何都用 `tools/stlcheck.py` 检查过：全部水密（watertight）、法向一致，单位统一为**米**。
+从三个公开仓库中提取出能直接用于外流场 CFD 的几何，并按车型归类。所有 STL（包括 STEP 的三角化结果）都用 `tools/stlcheck.py` 检查过：全部水密（watertight）、法向一致，单位统一为**米**。
 
 ## 预览
 
@@ -13,7 +13,7 @@
 | 原车 | 尾翼 + 标准立柱 | 尾翼 + 鹅颈吊挂 | 尾翼 + 后伸鹅颈吊挂 |
 |---|---|---|---|
 | ![](tesla_model_s/previews/baseline.png) | ![](tesla_model_s/previews/rearwing_standard_pylons.png) | ![](tesla_model_s/previews/rearwing_swan_neck.png) | ![](tesla_model_s/previews/rearwing_swan_neck_back.png) |
-| **悬浮尾翼（无支架）** | **STEP 车身（无车轮）** | **STEP 车身 + 扰流板** | |
+| **悬浮尾翼（无支架）** | **STEP 车身（无车轮）** | **Fluent 面网格：车身 + 扰流板** | |
 | ![](tesla_model_s/previews/rearwing_floating_no_mounts.png) | ![](tesla_model_s/previews/baseline_from_step.png) | ![](tesla_model_s/previews/with_spoiler_fluent_surface.png) | |
 
 **Tesla Cybertruck**
@@ -30,7 +30,7 @@
 cfd_geometry/
 ├── previews/overview.png           # 全部配置的预览拼图
 ├── tesla_model_s/
-│   ├── polimi_openfoam/            # 来源①  MIT   带车轮，5 种尾翼配置，OpenFOAM 算例
+│   ├── polimi_openfoam/            # 来源①  MIT   带车轮，原车 + 4 种尾翼配置，OpenFOAM 算例
 │   │   ├── stl/                    #   5 个 STL
 │   │   └── openfoam_case/          #   blockMesh/snappy/simpleFoam 字典 + Allrun
 │   └── fluent_spoiler/             # 来源②  MIT   无车轮车身 + 扰流板

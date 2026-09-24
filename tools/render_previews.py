@@ -31,7 +31,7 @@ ITEMS = [
     (MS, "rearwing_swan_neck_back", "Model S · wing, swan neck (back)", [f"{MS}/polimi_openfoam/stl/rearwing_swan_neck_back.stl"], +1),
     (MS, "rearwing_floating_no_mounts", "Model S · floating wing", [f"{MS}/polimi_openfoam/stl/rearwing_floating_no_mounts.stl"], +1),
     (MS, "baseline_from_step", "Model S · STEP body (no wheels)", [f"{MS}/fluent_spoiler/stl/baseline_from_step.stl"], +1),
-    (MS, "with_spoiler_fluent_surface", "Model S · STEP body + spoiler", [f"{MS}/fluent_spoiler/stl/with_spoiler_fluent_surface.stl"], +1),
+    (MS, "with_spoiler_fluent_surface", "Model S · Fluent surface + spoiler", [f"{MS}/fluent_spoiler/stl/with_spoiler_fluent_surface.stl"], +1),
     (CT, "standard_closed_bed", "Cybertruck · standard", ct("standard_closed_bed", "bodyCassoneChiuso_mm.stl"), -1),
     (CT, "open_bed", "Cybertruck · open bed", ct("open_bed", "bodyCassoneAperto_mm.stl"), -1),
     (CT, "roof_rack", "Cybertruck · roof rack", ct("roof_rack", "bodyRoofrack_mm.stl"), -1),

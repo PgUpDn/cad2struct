@@ -16,7 +16,7 @@
 
 ---
 
-## A. `polimi_openfoam/` — 带车轮，五种尾翼配置（OpenFOAM 可直接跑）
+## A. `polimi_openfoam/` — 带车轮，原车 + 4 种尾翼配置（OpenFOAM 可直接跑）
 
 原始文件是 `Geometry.rar` 里 CATIA 导出的 ASCII STL。这里已解压，并转成二进制 STL（体积约为原来的 1/4，几何不变）。
 
@@ -50,7 +50,7 @@ cd polimi_openfoam/openfoam_case
 
 **实测**：用 OpenFOAM v1912 跑了 `./Allrun rearwing_swan_neck 4`（仅测试时把分解方法换成 `simple`，因为 Debian 的 v1912 包没带 scotch）。snappyHexMesh 报告 "Finished meshing without any errors"，生成 512 万网格（含 5 层边界层），4 核耗时约 40 分钟。checkMesh 只有 29 个高偏斜面（max skewness 6.75）。simpleFoam 跑了 3 步，残差正常下降。字典的文件头标的是 **v2406**；在 v1912 下 `forceCoeffs` 函数对象会报错，需要加 `-noFunctionObjects` 才能跑，建议用 v2406 及以上版本。
 
-> ⚠️ `system/forceCoeffs` 里 `Aref 2.2` 是整车迎风面积，但计算域只有半车，所以输出的 Cd/Cl 是真实值的一半。要么把 Aref 改成 1.1，要么把结果乘 2。
+> ⚠️ `system/forceCoeffs` 里 `Aref 2.2` 对应整车迎风面积（按 `baseline.stl` 投影实测约 2.37 m²），但计算域只有半车，力也只有一半，所以输出的 Cd/Cl 约为真实值的一半。要么把 Aref 改成半车面积（原作者估计值为 1.1，实测约 1.18 m²），要么把结果乘 2。
 
 ---
 

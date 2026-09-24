@@ -19,7 +19,12 @@
 |---|---|---|---|
 | ![](previews/standard_closed_bed.png) | ![](previews/open_bed.png) | ![](previews/roof_rack.png) | ![](previews/roof_carrier_box.png) |
 
-四个算例共用同一套车轮 `FR_mm.stl`（前轮）和 `RR_mm.stl`（后轮），每个 2,496 面、8 个闭合实体。四个算例之间只有车身 STL 和对应的 patch 名不同，求解设置完全一样。所有 STL 都已验证水密、法向一致。原文 Cd 取自 `postprocessing/cdBreak.py`。
+四个算例共用同一套车轮 `FR_mm.stl`（前轮）和 `RR_mm.stl`（后轮），每个 2,496 面、8 个闭合实体。四个算例的边界条件、网格参数和湍流模型都相同，除了车身 STL 和对应的 patch 名以外，原作者的设置还有几处小差别（均保留原样）：
+
+- `roof_rack/`、`roof_carrier_box/`：`system/fvSolution` 里没有 `residualControl`（标准版为 p 1e-4、U/k/ω 1e-5）和 `turbOnFinalIterOnly false`，所以会一直跑满 5000 步；`controlDict` 里的 `fieldAverage1` 为 `enabled false`。
+- `open_bed/`：`controlDict` 为 `startFrom latestTime`（续算），`fieldAverage1` 的 `timeStart 1000` 被注释掉，即从第 0 步开始平均。
+
+所有 STL 都已验证水密、法向一致。原文 Cd 取自 `postprocessing/cdBreak.py`。
 
 ## 坐标与单位
 
@@ -37,7 +42,7 @@ cd standard_closed_bed      # 或其它三个配置
 ./Allclean.sh
 ```
 
-求解器为 `foamRun` + `incompressibleFluid`，k-ω SST，共 5000 步。车轮用 MRF 区（`topoSetDict` 里的圆柱）加 `rotatingWallVelocity` 边界模拟旋转。`controlDict` 里自带 forceCoeffs 输出（magUInf 30，lRef 5.683，Aref 1.60 为半车迎风面积）。
+求解器为 `foamRun` + `incompressibleFluid`，k-ω SST，共 5000 步。车轮用 MRF 区（`topoSetDict` 里的圆柱）加 `rotatingWallVelocity` 边界模拟旋转。`controlDict` 里自带 forces / forceCoeffs 输出（magUInf 30，lRef 5.683，Aref 1.60，原注释为 "frontal area"）。
 
 原作者给出的网格规模约 800 万单元。`Allrun.sh` 写死了 6 核，需要的话请同时修改 `system/decomposeParDict`。
 
@@ -46,6 +51,7 @@ cd standard_closed_bed      # 或其它三个配置
 ## 注意
 
 - **MRF 转速单位疑似写错**：`constant/MRFProperties` 写的是 `rpm 67.887126`，但车轮壁面边界条件用的是 `omega 67.8871`（rad/s），而 30 m/s ÷ 0.442 m 轮半径 = 67.9 rad/s。也就是说，这个 rad/s 的数值被写在了 `rpm` 键下，MRF 区实际只转 7.1 rad/s，和轮面转速对不上。建议把 `rpm 67.887126;` 改成 `omega 67.887126;`。这里保留了原文件，没有改动。
+- **Cd 的参考面积和积分范围**：我把标准配置的车身和 −y 侧车轮在地面以上的部分投影到 y-z 平面，测得半车迎风面积约 1.38 m²，比 `Aref 1.60` 小约 14%。如果 Aref 本意是半车迎风面积，那么输出的 Cd 会偏低约 14%。另外，forces / forceCoeffs 的 `patches` 只包含车身，**不含车轮**（`FR_mm`、`RR_mm`），所以原文 Cd 里没有车轮阻力。
 - 原仓库里 `CAD modifications/roofrack_1_4pz.stl` 是单独的行李架零件（单位 mm，没有车身），已经合并进 `roof_rack/` 的车身 STL，所以没有单独拷过来。
 
 ## 后处理脚本
